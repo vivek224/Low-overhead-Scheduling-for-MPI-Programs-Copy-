@@ -1,0 +1,108 @@
+\ProvidesPackage{beamerthemeVATT}[2018/04/16]
+
+\definecolor{VATTred}{RGB}{153,21,24}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Outer theme
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\useoutertheme[width=.15\paperwidth]{sidebar}
+\setlength{\beamer@headheight}{.185\paperheight}
+\pgfdeclareimage[width=.33\paperwidth]{type-logo}{Logo}
+\pgfdeclareimage[width=\paperwidth]{large-corner}{Banner}
+\pgfdeclareimage[height=\beamer@headheight]{small-corner}{Logo}
+\setbeamertemplate{sidebar left}{%
+\vskip7pt
+\insertverticalnavigation{\beamer@sidebarwidth}%
+}
+
+%Footer
+\setbeamertemplate {footline}[text line]{%
+\begin{beamercolorbox}[wd=.67\paperwidth,ht=2.5ex,dp=2.3ex,leftskip=-2.3cm,rightskip=.3cm]{footer}%
+    \usebeamerfont{footer}\insertshortauthor\hfill\insertshorttitle\hfill\insertshortdate\hspace{1em}\insertframenumber/\inserttotalframenumber
+  \end{beamercolorbox}
+}
+
+\addtobeamertemplate{frametitle}{}{%
+\begin{pgfpicture}
+\pgf@relevantforpicturesizefalse
+\pgftransformxshift{-\Gm@lmargin}
+\pgftransformyshift{\beamer@headheight+18pt}
+
+%Red horizontal line
+\pgfpathmoveto{\pgfpoint{.15\paperwidth}{-.2\paperheight}}
+\pgfpathlineto{\pgfpoint{.15\paperwidth}{-.93\paperheight}}
+\pgfsetlinewidth{1pt}
+\pgfsetcolor{VATTred}
+\pgfusepath{stroke}
+%Footer banner picture
+\pgftext[at=\pgfpoint{\paperwidth}{-\paperheight},right,base]{\pgfuseimage{large-corner}}
+\end{pgfpicture}%
+\vskip-28pt%
+}
+
+\addtobeamertemplate{title page}{%
+\usebeamertemplate{title background}%
+\vskip .2\paperheight%
+}
+{}
+
+\newcommand\DoTitleBackground{%
+\pgfpathmoveto{\pgfpointorigin}
+\pgfpathrectanglecorners{\pgfpoint{0pt}{0pt}}{\pgfpoint{\paperwidth}{-\paperheight}}
+\pgfsetfillcolor{white}
+\pgfusepath{fill}
+\pgftext[at=\pgfpoint{\paperwidth}{-\paperheight},right,base]{\pgfuseimage{large-corner}}
+}
+
+%Background for Title and Thank you
+\setbeamertemplate{title background}{%
+\begin{pgfpicture}
+\pgf@relevantforpicturesizefalse
+\pgftransformxshift{-\Gm@lmargin}
+\pgftransformyshift{5.5pt}
+\DoTitleBackground
+\end{pgfpicture}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Inner Theme
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\useinnertheme{rectangles}
+\setbeamertemplate{navigation symbols}{}
+
+\setlength{\leftmargini}{.5em}
+\setlength{\leftmarginii}{1.0em}
+\setlength{\leftmarginiii}{1.5em}
+\setlength{\leftmarginiv}{2.0em}
+\setlength{\leftmarginv}{2.5em}
+\setlength{\leftmarginvi}{3.0em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colours
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usecolortheme[named=VATTred]{structure}
+\usecolortheme{rose}
+\setbeamercolor{title page}{fg=black}
+\setbeamercolor{logo}{bg=white}
+\setbeamercolor{frametitle}{fg=black,bg=white}
+\setbeamercolor{section in sidebar}{fg=VATTred}
+\setbeamerfont{section in sidebar}{series=\bfseries}
+\setbeamercolor{block title}{bg=VATTred!28!white,fg=VATTred}
+\setbeamercolor{block body}{bg=VATTred!15!white}
+\setbeamercolor{section in sidebar}{fg=VATTred}
+\setbeamerfont{section in sidebar}{series=\bfseries}
+
+\newcommand\ThankYouFrame{
+\begin{frame}[plain,t]
+\begin{pgfpicture}
+\pgf@relevantforpicturesizefalse
+\pgftransformxshift{-\Gm@lmargin}
+\pgftransformyshift{5.5pt}
+\DoTitleBackground
+\pgftext[at=\pgfpoint{.5\paperwidth}{-.35\paperheight},center,center]{\huge\structure{Thank You!}}
+\pgftext[at=\pgfpoint{.5\paperwidth}{-.5\paperheight},center,center]{\structure{\insertinstitute}}
+\pgftext[at=\pgfpoint{.5\paperwidth}{-.65\paperheight},center,center]{\pgfuseimage{type-logo}}
+
+\end{pgfpicture}
+\end{frame}
+}

@@ -1,0 +1,160 @@
+\begin{frame}{Enhancing Support for Improving Locality in OpenMP Programs}{Introduction} 
+\begin{itemize}
+\tiny \item \tiny Data locality is important for efficient execution of an OpenMP application in which work is assigned or scheduled to threads dynamically. Using the clause ‘affinity’ for task scheduling proposed for OpenMP 5.0 can improve data   locality~\cite{ompaffclause}. 
+\item \tiny However, the task scheduling strategies are fixed by the runtime system, even with the hints available to the affinity to the affinity clause. While having a few fixed task scheduling scheduling strategies taking into account data locality can be beneficial for most applications-architecture pairs, it is arguable that this small set of task scheduling strategies isn’t beneficial for all applications-architecture pairs \cite{dynwork2, dynwork, worksteal99,DonfackMulticore, DPLASMA,Kulkarni08schedulingstrategies}. 
+
+\item \tiny OpenMP needs adequate amount of support to maintain high levels of data locality when scheduling tasks to threads. We need to provide a larger numberof hints to the OpenMP runtime of how to assign OpenMP tasks to threads in a way that preserves data locality.
+
+\item \tiny Specifically, we need 
+\begin{enumerate} 
+\tiny \item \tiny task-to-thread affinity in OpenMP to reduce capacity cache misses on a multi-core node, which we’ll refer to as locality-awareness, and 
+\item \tiny task-to-thread affinity in OpenMP to reduce coherence cache misses on a multi-core node, which we’ll refer to as locality-sensitivity.
+\end{enumerate} 
+\item \tiny Our ideas build on the work on the affinity clause being proposed for addition to OpenMP version 5.0~\cite{OpenMP} in that the user provides input to the clause as hints on \textit{what} data needs to be localized and the \textit{degree} to which the data should be localized. 
+\item \tiny In this work, our contribution is the addition of constructs to OpenMP that provides and allow for a rich set of task scheduling schemes having locality-awareness or locality-sensitivity. 
+\item \tiny We focus on developing (a) and building on (b) from previous work.
+\end{itemize} 
+\end{frame}
+
+\begin{frame}{Motivation}{OpenMP Affinity Hints for Task Scheduling of Load Balanced Computation}
+\begin{itemize}
+\small \item \small Using the clause `taskloop`, one can delegate to the OpenMP runtime system how the work will be parallelized across threads without restricting oneself to a static schedule’s assignment of work to threads. 
+\item \small However, using taskloop in this context creates spurious memory flushes and cache capacity misses. 
+\item \small The user will have ideas on what arrays should be localized, i.e., privatized, through their knowledge of the numerical algorithm.
+\item \small The user can provide hints to the runtime system implementing \texttt{taskloop} so as to reduce cache misses caused by accesses to particular data, e.g., an array used in computation.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Using Data Driven Scheduling For Matrix Multiplication}
+\begin{itemize}
+\small \item \small Use an outer loop iterator for worksharing, but schedule them according to some interior loop iterator that has control on the data space being accessed. 
+\item \small This is a form of data-driven scheduling.
+\end{itemize}
+
+\begin{itemize}
+\item \small Consider again the following code for computing the product of two matrices. 
+\item \small Array `B` can be partitioned into some number of chunks, where the number of chunks is, e.g., number of cores or worker threads. 
+\item \small In this example, we assume we run the code on a node with 4 cores. 
+\item \small We can use 4 as the number of chunks to split array `B` into 4 disjoint sets `B[*][0:N/4-1]`, `B[*][N/4:2N/4-1]`, `B[*][N/2:3N/4-1]` and `B[*][3N/4:N-1]`. For convenience, we call these sets `BJ1`, `BJ2`, `BJ3` or `BJ4`. 
+\item \small These memory regions are associated to the memory space accessed by threads 0-3 (or cores 0-3). Threads can only execute on the core that owns a specific subset of `B`.
+\item \small Cyclic shifts are performed so that each thread can access all `BJ`s to complete its computing.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Performance Benefit Using Key Idea} {Matrix Matrix Multiplication with Tasking}
+%``` C++, caption=Matrix Matrix Multiplication with tasking.
+\begin{figure}
+\lstinputlisting{./listings/taskingDataLocalityProposal1.C}
+\caption{Matrix Matrix Multiplication with tasking.}
+\end{figure}
+
+% ```
+\begin{itemize} 
+\tiny \item \tiny  The effect of the pragma in the code above is to schedule iterations of the workshared loop on the core that owns a specific subset of `B` (controlled by iterator `j`). 
+
+\item \tiny In the example above, `B` is selected because the memory traffic induced by writing to array `C` and reading from array `A` is small. 
+
+\item \tiny Effectively, the value written to entry `C[i][j]` can be computed on a single scalar, whereas for `A`, the memory required is proportional to the value of `P`. 
+
+\item \tiny  If the total size of `B` exceeds the Lowest Level Cache’s capacity, the number of chunks can be chosen so that some number of `BJ` chunks fit in the last level-private cache of a single core, e.g., some large L2 cache. 
+\end{itemize} 
+\end{frame} 
+
+
+\begin{frame}{Proposal for Extending OpenMP to Enhance Locality}{Load Balanced Computation}
+\begin{itemize} 
+\tiny \item \tiny   To avoid spurious memory flushes and cache capacity misses, we propose extending OpenMP with explicit privatization mechanisms.
+\item \tiny In the matmul example: 
+\begin{itemize} 
+\tiny \item \tiny array `C` can be classified as a “Write, Shared” memory region
+\item \tiny array `A` as “Read, Shared” 
+\item \tiny array `B` as “Read, Private”. 
+\end{itemize}
+\item \tiny Given that the work sharing is driven by iterator `i`, we can add a clause to compute the values of array `C` in a “row by row” manner, buffering the writes, pushing them to main memory in bulk once the buffer is filled, and at a given time (or iterator).
+\item \tiny For instance, if we had 4 threads, each with a buffer size of `4N`, we could pipeline the write of `BUF(C,thread)` at times `(i \% 4 == thread\_id)`, i.e., thread 0 writes its buffer to main memory whenever `i \% 4 == 0`, thread 1 writes when `i \% 4 == 1`, and so on. 
+\item \tiny With respect to the Outer Worksharing - Inner Scheduling or Array Segment Privatization approach, array `B` would be labeled or tagged as “Read Shared”. 
+\item \tiny  This means that the data of array `B` would invariably be accessed by potentially all threads, and that a data-driven scheduling policy could be beneficial if `B` can be split into disjoint data sets. 
+\item \tiny Lastly, depending on the loop order in our matmul example, a segment of array `A` can be pre-loaded and kept in cache, e.g., the L1 cache.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Syntax for Task affinity and Performance Benefits}
+\framesubtitle{Load Balanced Computation}
+\begin{figure}[ht!]
+\lstinputlisting[]{./listings/TaskingMatMulProposal1Full.C}
+\end{figure}
+\begin{enumerate} 
+\tiny \item \tiny This approach will allow to schedule the writes to main memory and reduce the potential contention for bandwidth on the shared memory interconnect that could arise for frequent updates to the same memory location. 
+\item \tiny The important observation here is that {\it suitable mechanisms that allow to associate subregions of a shared array to a core are required to maintain good data locality}. The user is required to request private regions with specific buffer sizes.
+\item \tiny Most conditions envisioned for determining when some buffer must be reloaded or dumped can be represented as a function of the worksharing iterator.
+\end{enumerate}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Conclusion}
+\framesubtitle{Tasking}
+
+\begin{enumerate}
+   \small \item \small There’s a way to enable locality-aware tasking in openmp 5.0 and no way to specify locality in openmp loop scheduling. 
+\item \small We need to facilitate for or create a larger number of locality-aware scheduling strategies for a code because some codes don’t benefit from the runtime based locality-aware tasking. 
+\item \small We need to support locality-aware loop scheduling. We can do so by adding such a schedule or augmenting / making modifiers for dynamic and guided schedules.
+\item \small We propose an interface for supporting locality-aware scheduling and an interface for locality-aware tasking along with notes on implementation.
+\item \small We believe that such support of locality-awareness in tasking and such support in scheduling in OpenMP will improve performance of OpenMP application codes. 
+\end{enumerate}
+
+\end{frame} 
+
+%\begin{markdown}
+
+%### Budgeting
+
+%#### Projected Profit
+
+%1. And the answer is...
+%2. $f(x)=\sum_{n=0}^\infty\frac{f^{(n)}(a)}{n!}(x-a)^n$
+  % #. How do we _know_ that?
+  % #. __Maths!__
+
+%\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%### Testing blocks
+
+%#### This is a block!
+
+%- Here is some content.
+%- Here's more contents.
+
+%---
+
+
+%\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+%### Citations
+
+%- This is a book %[@BookKey]
+%- This is an article %[@ArticleKey]
+
+
+
+%\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+%\end{markdown}

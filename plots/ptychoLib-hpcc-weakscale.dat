@@ -1,0 +1,12 @@
+#	Nodes	it	oGPUmx	oGPUav	Static  Dynamic	   SlackConscious    Binding  uSched	callsite     genColl     guided		callsite_dq	callsite_fd  bestfs_t  vSched   full
+	1      	200	195.25	195.19	403.13      nan       nan              nan     nan      401.52         nan         nan           401.32             398.24    401.21
+	2      	200	202.44	200.51	424.51      nan       nan              nan     nan      410.61         nan         nan           410.56             406.52    408.61
+	4      	200	204.38	202.56	449.68      nan       nan              nan     nan      438.58         nan         nan           438.16             437.25    440.64
+	8      	200	204.98	203.24	501.12      nan       nan              nan     nan      469.67         nan         nan           469.12             465.51    472.61
+	16     	200	207.42	205.18	532.61      nan       nan              nan     nan      481.39         nan        nan            481.39             478.68    493.06
+	32     	200	208.35	206.02	545.21      nan       nan              nan     nan      505.38         nan        nan           500.25             495.56    509.61
+	64     	200	212.45	208.61	571.68      nan       nan              nan     nan      509.68        nan         nan            508.51             502.82    520.25
+       128     	200	nan	nan	609.67      nan       nan              nan     nan      538.86         nan        nan           530.51             525.68    541.63
+       256    	200	nan	nan	610.27      nan       nan              nan     nan      546.46         nan        nan           540.10             532.58    549.12
+       512    	200	nan	nan	618.61      nan       nan              nan     nan      551.35        nan         nan            545.61             538.55    558.16
+       1024   	200	nan	nan	623.62      834.82    561.86           nan     575.92   558.85	      568.39      582.06         550.01             548.76    575.62

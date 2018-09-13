@@ -1,0 +1,329 @@
+\documentclass{beamer}
+
+%\documentclass[12pt,t,handout]{beamer} % use for plain 
+\usetheme{Luebeck}
+\useoutertheme{infolines} 
+
+%\ifx\notescolors\undefined 
+%\slides\definecolor{foreground}{RGB}{255,255,255}\definecolor{background}{RGB}{24,24,24}
+%\else
+%\notes\definecolor{background}{RGB}{255,255,255}\definecolor{foreground}{RGB}{24,24,24}
+%\fi
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathabx}
+\usepackage{mathpazo}
+\usepackage{eulervm}
+%\usepackage{natbib}
+
+\setbeameroption{show notes}\setbeamertemplate{note page}[plain]\def\notescolors{1}
+
+%% Load the markdown package
+\usepackage[citations,definitionLists,hashEnumerators,smartEllipses,tightLists=false,hybrid]{markdown}
+
+%\markdownSetup{headingTwo=\begin{frame}{#1}}
+
+%\usetheme{Dresden}
+%\usefonttheme{serif}
+%\usecolortheme{rose}
+
+\setbeamertemplate{frametitle}[default][center]
+
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+ 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92} 
+
+ \lstset{
+        language=C++,
+        basicstyle=\small\ttfamily, % Standardschrift %
+                                    % % TODO: consider making tiny to make  
+                                     % % things f
+         numbers=none,               % Ort der Zeilennummern           
+         numberstyle=\footnotesize\ttfamily,          % Stil der Zeilennummern       
+         %stepnumber=2,               % Abstand zwischen den Zeilennummern  
+         numbersep=6pt,              % Abstand der Nummern zum Text
+         tabsize=2,                  % Groesse von Tabs                     
+         extendedchars=true,         % 
+        breaklines=true,            % Zeilen werden Umgebrochen             
+        frame=single,
+         keywordstyle=[1]\textbf,    % Stil der Keywords                  
+         stringstyle=\ttfamily,
+         showspaces=false,           % Leerzeichen anzeigen ? 
+         showtabs=false,             % Tabs anzeigen ?                              
+         showstringspaces=false      % Leerzeichen in Strings anzeigen ?   
+         commentstyle=\color{green},
+         keywordstyle=\color{magenta},
+         numberstyle=\tiny\color{gray},
+         keywordstyle=\color{blue},
+         stringstyle=\color{red},
+         morecomment=[l][\color{magenta}]{\#},
+    captionpos=b,
+      numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,  
+}
+
+\usepackage{beamerthemesplit} 
+\usepackage{graphics}
+\usepackage{graphicx}
+%\usepackage{comment} 
+
+\usepackage{biblatex}
+\usepackage{ulem}
+\usepackage{color}
+\usepackage{xspace}
+%\usepackage[colorlinks]{hyperref}
+%\usepackage[colorinlistoftodos]{todonotes}
+
+%\usepackage[twoside,citeonce(page),citeonce(chapter)]{footbib}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+% used for checkmarks and xes
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+\usepackage{courier}
+%\usepackage{cite}
+%\usepackage[usenames,dvipsnames]{xcolor} 
+\usepackage{xcolor}
+%\usepackage{scalefnt}
+%\setbeamertemplate{footline}{\insertframenumber/\inserttotalframenumber}
+\usepackage{outline}
+%\usepackage{flushend}
+\usepackage{float}
+\usepackage{subfig}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,tikzmark,shadows}
+\usetikzmarklibrary{listings} % for annotating code.
+
+% used for putting tables with data in slides 
+\usepackage{pgfplotstable}
+\usepackage{array}
+
+\usepackage{lmodern}
+%TODO: Fix .
+
+\usepackage[font=small]{caption}
+
+\DeclareCaptionLabelSeparator{horse}{:\quad} % change according to % your needs
+\captionsetup{
+  labelsep = horse,
+  figureposition = bottom % proper spacing between figure and caption
+} 
+
+\setbeamertemplate{caption}[numbered]
+
+%\usepackage[absolute,overlay]{textpos}
+%\setbeamertemplate{navigation symbols}{} 
+%\setbeamertemplate{footline}{%
+%    \begin{picture}(54,12.5)(0,0)
+%    \put(0.9,0.52){%
+%        \begin{minipage}[b][12.5mm][c]{112.5mm}
+%        \raggedleft
+%        \insertpagenumber/\insertpresentationendpage
+%        \end{minipage}
+%    }
+%    \end{picture}
+%} 
+%}
+
+%\usepackage{appendixbeamernumber}
+
+\newcommand*\curvedrightleft{%
+\ifmmode\mathchoice{\mathrel{%
+    \begin{tikzpicture}[scale=height("A")/0.45cm]%
+      \draw[->] (0,0.05) to [out=30,in=150] (1,0.05);%
+      \draw[->] (1,-0.05) to [out=-150,in=-30] (0,-0.05);%
+    \end{tikzpicture}%
+  }%
+}  
+{
+    \begin{tikzpicture}[scale=height("A")/0.4cm]%
+      \draw[->] (0,0.05) to [out=30,in=150] (1,0.05);%
+      \draw[->] (1,-0.05) to [out=-150,in=-30] (0,-0.05);%
+    \end{tikzpicture}%
+  }%
+{\mathrel{%
+    \begin{tikzpicture}[scale=height("A")/0.6cm]%
+      \draw[->] (0,0.05) to [out=30,in=150] (1,0.05);%
+      \draw[->] (1,-0.05) to [out=-150,in=-30] (0,-0.05);%
+    \end{tikzpicture}%
+  }%
+}
+{\mathrel{%
+    \begin{tikzpicture}[scale=height("A")/0.8cm]%
+      \draw[->] (0,0.05) to [out=30,in=150] (1,0.05);%
+      \draw[->] (1,-0.05) to [out=-150,in=-30] (0,-0.05);%
+    \end{tikzpicture}%
+  }%
+}
+\else
+\begin{tikzpicture}[scale=height("A")/0.4cm]%
+      \draw[->] (0,0.05) to [out=30,in=150] (1,0.05);%
+      \draw[->] (1,-0.05) to [out=-150,in=-30] (0,-0.05);%
+\end{tikzpicture}
+\fi
+}
+
+\newcommand{\htor}[1]{\textcolor{OliveGreen}{[htor: #1]}}
+\newcommand{\tg}[1]{\textcolor{orange}{[tg: #1]}}
+
+\newcommand{\todo}[1]{\textcolor{red}{[todo: #1]}} 
+
+\newcommand{\vivek}[1]{\textcolor{cyan}{[vivek: #1]}}
+\newcommand{\comments}[1]{}
+\newcommand{\bllt}{\item \small}
+\newcommand{\doneTask}[1]{\item \small \sout{#1}}
+\newcommand{\MyName}{Vivek~Kale}
+
+\newcommand{\fixme}[1]{\textcolor{blue}{[FIXME: #1]}}
+\newcommand{\revision}[1]{\textcolor{blue}{[FIXME comment : #1]}}
+
+\author{\MyName}
+\date{\today}
+%\title[Low-overhead Scheduling for MPI Programs]{Low-Overhead
+%Scheduling for Improving Performance of Synchronous MPI Programs on
+%Clusters of SMPs}
+
+% \title[]{Low-Overhead Scheduling for Improving Application Performance
+%  on Clusters of Multicore Nodes}
+\title[]{Performance Tuning and Low-overhead Loop Scheduling to Improve Performance of Computer Programs Used to Simulate Scientific Phenomenon}
+%TODO: check this 
+% Low-overhead loop scheduling for improving MPI programs
+\author[Performance Tuning and Low-overhead Scheduling for HPC]{
+  Vivek~Kale\inst{1}
+%  William~Gropp\inst{1}
+}
+
+\institute[]{
+  \inst{1}
+ Information Sciences Institute\\
+ University of Southern California
+}
+
+\subject{Computational Sciences}
+\pgfplotsset{compat=1.15}
+
+\begin{document}
+
+\renewcommand{\inserttotalframenumber}{\pageref{lastslide}}
+
+\begin{frame} 
+\begin{columns} 
+\column{0.7\columnwidth}
+
+\begin{columns} 
+\column{0.32\columnwidth}
+\hspace*{0.2in}
+\includegraphics[scale=0.5]{images/VivekPortrait.png}
+\column{0.68\columnwidth}
+
+{\Large Vivek Kale} \\
+{\small Computer Scientist} \\ 
+{\small University of Southern California, Information Sciences  Institute} \\
+{\small Los Angeles, California (USA)} \\ 
+\end{columns}
+
+\vspace*{0.2in}
+{\large \textbf{Scientific Field}: \textcolor{gray}{Computer Science}}
+\vspace*{0.2in}
+\newline 
+\large \textbf{Research Interests}\\ 
+\vspace*{-.1in}
+\begin{itemize} 
+\item High-Performance Computing
+\item Performance Tuning MPI+OpenMP Programs
+\item Scheduling Strategies for OpenMP Loops
+\end{itemize}
+\vspace*{0.02in}
+\large {\bf Personal Interests} \\ 
+\vspace*{-0.1in}
+\begin{itemize} 
+\item Tennis 
+\item Piano
+\end{itemize}
+\column{0.3\columnwidth}
+\begin{center} 
+\vspace*{-0.3in}
+\includegraphics[scale=0.4]{images/USCISILogo}\\ 
+\vspace*{0.6in}
+\includegraphics[scale=0.5]{images/VisualForIntro}\\
+\end{center}
+\end{columns}
+\end{frame}
+
+\AtBeginSection[]
+{
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents[part=1, pausesections]
+\end{frame}
+}
+
+\titlepage
+%\section{Prelim Outline Notes}
+%\input{./content_vivek-talk}
+
+%\frame{\tableofcontents}
+
+\input{./content_vivek-talkmsWork}
+
+% Thesis work                                  
+
+\input{./content_vivek-talkthesisWork}
+
+% Current work:
+% Talk about work on PRISMA
+% Talk about application code work for heat dissipation.
+% Dense matrix factorizations work.
+
+\begin{frame}{Work after Doctorate}
+\begin{enumerate} 
+\item Application Performance Tuning. 
+\item Work with OpenMP committee. 
+\item Combined Loop Scheduling and Load Balancing. 
+\end{enumerate}
+\end{frame}
+
+\input{content_vivek-talkPostdocWork}
+
+%\input{subcontent_appWork}
+
+% 2. Work on OpenMP
+%  a. Work on loop scheduling for OpenMP.                                     
+%  b. Work on task scheduling for OpenMP.
+%\input{subcontent_ompWork}
+
+% 3. Work on loop scheduling and load balancing for OpenMP. 
+%\input{subcontent_ckl} 
+
+% Involvement: OpenMP organizational committee, SC planning comittee  
+% 
+% Goals/ future work: 
+
+%acknowledgements
+
+\input{content_acks} 
+%\input{thanks}
+
+\input{content_questions}
+
+\begin{frame}
+\frametitle{Bibliography}
+
+\renewcommand{\bibfont}{\footnotesize}
+\bibliographystyle{apalike}
+\bibliography{references.bib}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,177 @@
+\begin{frame}{OpenMP Loops Redux}
+OpenMP provides a loop worksharing construct that specifies: 
+\begin{itemize}
+\item How the logical iteration space of a loop is cut into chunks
+\item How the resulting chunks are assigned to the work threads of the parallel region.
+\end{itemize}
+  
+%\begin{verbatim}
+% # pragma omp for \[clause\[ \[,\] clause\] ... \]
+%      for (int i=0; i<100; i++){}
+%\end{verbatim}
+
+\begin{itemize}
+\item Loop needs to be in canonical form, that is, adhere to certain properties
+\item The clause can be one or more of the following: \texttt{private(...)}, \texttt{firstprivate(...)}, \texttt{lastprivate(...)}, \texttt{linear(...)}, \texttt{reduction(...)}, \textbf{schedule(...)}, collapse(...), ordered[...], nowait, allocate(...) 
+\item We focus on the clause \textbf{schedule()}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Need Novel Loop Scheduling Techniques in OpenMP}
+
+\begin{enumerate}
+\item Supercomputer architectures and applications are changing.
+\begin{itemize}
+\small \item \small Large number of cores per node.
+\item \small Speed variability across cores.
+\item \small Complex dynamic behavior in applications themselves.
+\end{itemize}
+\item So, we need new methods of distributing an application’s parallelized loop's iterations to cores.
+\item Such methods need to: 
+\begin{itemize}
+\small \item \small Ensure data locality, reduce synchronization overhead and maintain load balance~%\cite{worksteal99, dynwork2}.
+\item \small Be aware of inter-node parallelism handled by libraries such as MPICH3~%\cite{mpich2}. 
+\item \small Be suitable for the needs of a particular loops and machine characteristics.
+\item \small Adapt during an application's execution.
+\end{itemize}
+\item Some customer demand for the SSG-DRD EMEA HPC team.
+\end{enumerate}
+\end{frame}
+
+
+
+
+\begin{frame}{Utility of Novel Strategies Shown} 
+\begin{itemize}
+\item Utility of novel strategies is demonstrated in published work by V. Kale et al 1,2 and others.
+\item For example, mixed static-dynamic scheduling strategy with an adjustable static fraction.
+\item To limit the overhead of dynamic scheduling, while handling imbalances, such as those due to noise.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Intel-specific Loop Schedules}
+Intel’s (and LLVM's) OpenMP runtime offer additional scheduling types:
+\begin{itemize}
+\small \item \small E.g., static stealing
+\item \small Are accessed through \texttt{schedule(runtime)} and \texttt{OMP\_SCHEDULE} environment variable
+\item \small Cumbersome to use; very complex to extend (need to modify the RTL code and recompile the RTL code)
+\item \small Not portable across OpenMP implementations
+\item \small Proposed user-defined scheduling (UDS) will provide a portable and flexible way of extending OpenMP’s loop scheduling types.
+\end{itemize}
+
+\end{frame} 
+
+
+\begin{frame}{ Specification of a User-defined Scheduling Scheme} 
+
+\begin{enumerate}
+\item We aim to specify a user-defined scheduling scheme within the OpenMP specification1 .
+\item The scheme should accommodate an arbitrary user-defined scheduler.
+\item These are the elements required to define a scheduler.
+\begin{itemize}
+\item Scheduler-specific data structures.
+\item History record: adapt the loop schedule based on previous loop invocations and/or user-specified carry parameters. 
+\item Specification of scheduling behavior of threads.
+\end{itemize}
+\end{enumerate} 
+\end{frame}
+
+
+
+\begin{frame}{ Proposal for a User-defined Schedule in OpenMP} 
+This example gives a glimpse at how a user-defined schedule might look like:
+
+
+\begin{figure}[ht!]
+\lstinputlisting{./listings/omp_uds_example.c}
+\end{figure}
+
+\begin{itemize} 
+\item The \texttt{declare schedule} directive is used to connect a schedule with a set of functions to initialize the schedule and hand out the next chunk of iterations.
+\item The syntax of the \texttt{schedule} clause is extended to also accept an identifier of 
+\item Instead of calling into the RTL for loop scheduling, the compiler will invoke the functions of the UDS 
+\item Visibility and namespaces of these identifiers will be borrowed from UDRs
+\end{itemize}  
+\end{frame} 
+%\begin{frame}{ An Implementation of the Dynamic Schedule with UDS} 
+%\end{frame} 
+%\begin{frame}{An Implementation of the Static Schedule with UDS}
+%\end{frame} 
+
+\begin{frame}{An Implementation of the Static/Dynamic Schedule with UDS}
+
+\begin{figure}
+    \centering 
+    \lstinputlisting{listings/openmpudsdyndatstruct.c}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
+\end{frame} 
+
+\begin{frame}{Issues to Consider}
+\begin{enumerate} 
+\item Modifiers to clause: non-monotonic 
+\begin{itemize}
+\item Problem: How do we handle loop having indices that are non-monotonic?
+\item Code example: 
+\item Solution: For the proposal, we restrict users to to use monotonic loops for now
+\end{itemize}
+\item How do schedules guarantee correct execution when a global variables are used?
+\begin{itemize}
+\item Problem: 
+\item Code example: 
+\item Solution we propose: 
+\end{itemize}
+
+\item Compatibility with clause concurrent: 
+\begin{itemize}
+\item Problem: See e-mails from Xinmin et al on this, including definition of concurrent in the classical sense.
+\item Code example showing problem:
+\item Proposed Solution: can enforce that concurrent not be used with user-defined schedule. 
+\end{itemize}
+\end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}{Implementation Specifics in LLVM} 
+
+\begin{itemize}
+\item Modify in LLVM OpenMP runtime. 
+\begin{itemize}
+\small \item \small Kmp\_sched.c
+\end{itemize}
+
+
+\item Modify LLVM's OpenMP compiler. 
+\begin{itemize}
+\small \item \small Would like help from people to do this to get a reference implementation done in a timely manner. 
+\end{itemize} 
+
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Current Status of the Proposal}{}
+\begin{itemize}
+\item Vivek Kale (external) presented the proposal at OpenMPCon and IWOMP
+\item There is a scientific paper showing the merits of UDS in general (using a prototype implementation based on macros)
+\item A report out of Vivek and myself has been scheduled for the FTF in Austin in ww05
+\item We are working on the syntax details plus a prototype implementation in the LLVM RTL (no compiler work envisioned for now)
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[label=udsconclusions]{Conclusions} 
+\begin{enumerate}
+\item One can schedule an OpenMP loop using the clause schedule provided by OpenMP. 
+\item The schedules available are defined by implementation.
+\item Need for experimentation with sophisticated loop scheduling strategies.
+\item OpenMP community should discuss how to allow flexible specification of such strategies in a user’s code and how to design a user-level scheduler library so that it can be portably used with any conforming OpenMP implementation.
+\item Supporting user-defined schedulers in this way will facilitate rapid development of scheduling strategies.
+\item We hope that the experts will discuss these ideas at this F2F.
+\end{enumerate}
+\end{frame}

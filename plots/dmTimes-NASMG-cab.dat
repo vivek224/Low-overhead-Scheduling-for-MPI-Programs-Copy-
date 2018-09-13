@@ -1,0 +1,9 @@
+#	cores	size	dq_s	dm_s	comp_s	id_s	L2m_s	L3m_s	dq_d	dm_d	comp_d	id_d	L2m_d	L3m_d	dq_g	dm_g	comp_g	id_g	L2m_g	L3m_g      dq_sd       dm_sd      comp_sd    id_sd     L2m_sd     L3m_sd
+	1	D	0.00	0.00	0.0	0.02	nan	nan	0.03	0.01	8.24	0.0	nan	nan	0.01	0.0	8.20	0.0	Nan	Nan	   0.0	       0.0	  0.0	     0.0       Nan	  Nan 
+	2	D	0.00	0.00	0.0	0.12	nan	nan	0.17	0.04	8.45	0.0	nan	nan	0.11	0.0	8.34	0.0     Nan     Nan	   0.0	       0.0	  0.0	     0.0       NaN	  NaN
+	4	D	0.00	0.00	40.26	1.05	nan	nan	0.33	0.06	8.99	0.0	Nan	nan	0.23	0.0	8.63	0.0     Nan     Nan 	   0.0		0.0	  0.0	     0.0       NaN        NaN
+	8	D	0.00	0.00	0.0	0.15	nan	nan	0.60	0.15	9.49	0.0	nan	nan	0.42	0.0	8.97	0.0     Nan     Nan	   0.0		0.0	  0.0	     0.0       NaN 	  NaN 
+	16	A	0.00	0.00	0.0	0.19	nan	nan	0.06	0.26	1.91	0.02	0	0	0.05	0.12	1.93	0.04	NaN	NaN	   0.0		0.0	  0.0	     0.0       nan	  NaN 
+	16	B	0.00	0.00	0.0	0.21	nan	nan	0.14	0.32	2.90	0.03	0	0	0.08	0.22	2.96	0.06	NaN	NaN	   0.0		0.0	  0.0	     0.0       NaN	  NaN 
+	16	C	0.01	0.00	0.0	0.22	nan	nan	0.23	0.87	4.80	0.06	0	0	0.14	0.60	4.86	0.07	NaN	NaN	   0.0		0.0	  0.0	     0.0       NaN	  NaN 
+	16	D	0.01	0.00	11.98	1.28	nan	nan	0.51	1.53	12.98	0.15	0	0	0.32	0.97	12.51	0.23	NaN	NaN	   0.24		0.68	  12.19	     0.82      NaN	  NaN

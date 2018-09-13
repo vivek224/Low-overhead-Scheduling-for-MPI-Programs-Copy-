@@ -1,0 +1,12 @@
+Nodes  Static  Dynamic Slack-Conscious  Binding uSched	callsite        genColl     guided      callsite_dq     callsite_fd
+1      490.62      nan       nan              nan     nan      485.52         nan         nan   482.35          487.45
+2      491.25      nan       nan              nan     nan      498.61         nan         nan   495.43          490.41
+4      497.68      nan       nan              nan     nan      506.79         nan         nan   504.34          495.51
+8      501.12      nan       nan              nan     nan      509.67         nan         nan   509.43          498.51
+16     532.61      nan       nan              nan     nan      518.77         nan         nan   517.88          519.25
+32     545.21      nan       nan              nan     nan      519.93         nan         nan   518.51          524.52
+64     571.68      nan       nan              nan     nan      529.29         nan         nan   525.35          529.53
+128    609.67      nan       nan              nan     nan      535.86         nan         nan   535.03          535.55
+256    610.27      nan       nan              nan     nan      541.71         nan         nan   540.91          542.41
+512    618.61      nan       nan              nan     nan      554.67         nan         nan   553.12          547.51
+1024   623.62      864.96    562.86           nan     593.92   561.97	      578.53      619.3 560.04          554.05
